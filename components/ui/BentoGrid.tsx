@@ -67,7 +67,9 @@ export const BentoGridItem = ({
 
   const handleCopy = () => {
     const text = "https://github.com/AKD27";
-    navigator.clipboard.writeText(text);
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
     setCopied(true);
   };
 

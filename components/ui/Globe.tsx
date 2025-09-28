@@ -178,7 +178,9 @@ export function Globe({ globeConfig, data }: WorldProps) {
         return (e as { arcAlt: number }).arcAlt * 1;
       })
       .arcStroke((e) => {
-        return [0.32, 0.28, 0.3][Math.round(Math.random() * 2)];
+        return [0.32, 0.28, 0.3][
+          typeof Math !== "undefined" ? Math.round(Math.random() * 2) : 0
+        ];
       })
       .arcDashLength(defaultProps.arcLength)
       .arcDashInitialGap((e) => (e as { order: number }).order * 1)
@@ -234,7 +236,9 @@ export function WebGLRendererConfig() {
   const { gl, size } = useThree();
 
   useEffect(() => {
-    gl.setPixelRatio(window.devicePixelRatio);
+    if (typeof window !== "undefined") {
+      gl.setPixelRatio(window.devicePixelRatio);
+    }
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffaaff, 0);
   }, []);
