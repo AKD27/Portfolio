@@ -48,13 +48,22 @@ export function HoverBorderGradient({
     "radial-gradient(75% 181.15942028985506% at 50% 50%, #3275F8 0%, rgba(255, 255, 255, 0) 100%)";
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let interval: NodeJS.Timeout; // ✅ Type-safe
+
     if (!hovered) {
-      const interval = setInterval(() => {
-        setDirection((prevState) => rotateDirection(prevState));
-      }, duration * 1000);
-      return () => clearInterval(interval);
+      const safeDuration =
+        typeof duration === "number" && duration > 0 ? duration : 1;
+
+      interval = setInterval(() => {
+        setDirection((prev) => rotateDirection(prev));
+      }, safeDuration * 1000);
     }
-  }, [hovered]);
+
+    return () => clearInterval(interval);
+  }, [hovered, duration]);
+
   return (
     <Tag
       onMouseEnter={(event: React.MouseEvent<HTMLDivElement>) => {
